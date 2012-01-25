@@ -243,7 +243,7 @@ union{
 	//translate <1,-2,0>
 	}
 	rotate <0,180,0>
-	scale 0.1
+	scale 3
 }
 #end
 
