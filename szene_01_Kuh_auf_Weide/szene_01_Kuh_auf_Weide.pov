@@ -14,11 +14,15 @@ global_settings{
 
 }
 
+
+//######### START Kamera ##########
 camera {
-        location  <0, 0, -17>
+        location  <0, 0, -10>
         look_at   <0, 0,  0>
 }
+//########## END Kamera ##########
 
+//########## START Licht #########
 light_source {
 	< 0.0, 100, 30>*-1
 	color White
@@ -45,6 +49,27 @@ light_source{
 		reflection on
 	}
 }
+
+light_source{
+	<0.0,10.0,-2.0>
+	color White*1
+	spotlight
+	point_at <0,0,0.5>
+	falloff 180
+	radius 100.5
+	tightness 0.0
+	jitter
+	adaptive 4
+	photons{
+		refraction on
+		reflection on
+	}
+}
+
+//######### END Licht #########
+
+
+//######### Start Cubemap ##########
 
 // Macro for the adjustment of images
 // for image_map with assumed_gamma = 1.0 ;
@@ -84,32 +109,34 @@ box{ <-1, -1, -1>,< 1, 1, 1>
 scale 1000
 } // end of skybox --------------------
 
+//######### End Cubemap ##########
+
+
+//######### START Boden #########
+plane { y, -1 
+	texture {  
+		tiles { // Verschachtelung von Texturen 
+			texture { 
+				pigment { color red 1 green 1 blue 1 } 
+				//finish { reflection 0.4 } 
+			} 
+			tile2 
+			texture { 
+				pigment { color red 0 green 0 blue 0 } 
+				//finish { reflection 0.4 } 
+			}   
+		} 
+		scale 2.3 // bestimmt die Größe der Kacheln 
+	} 
+} 
+
+
+//######### END Boden #########
 
 
 
-//plane { y, -1 
-//	texture {  
-//		tiles { // Verschachtelung von Texturen 
-//			texture { 
-//				pigment { color red 1 green 1 blue 1 } 
-//				finish { reflection 0.4 } 
-//			} 
-//			tile2 
-//			texture { 
-//				pigment { color red 0 green 0 blue 0 } 
-//				finish { reflection 0.4 } 
-//			}   
-//		} 
-//		scale 2.3 // bestimmt die Größe der Kacheln 
-//	} 
-//} 
 
-
-
-
-
-
-
+//########## Start Flügel ##########
 
 #declare Flattern = 45;//sin(clock)*90;
 
@@ -162,33 +189,13 @@ scale 1000
 
 //object{Wings rotate y*90 scale 0.1}
 
-//plane {
-//	<0,1,0>, 0.0
-//	pigment{
-//		image_map{jpeg "texture.jpg"
-//		interpolate 2
-//		}
-//	scale 1	
-//	}
-//}
+
+//########## END Flügel ##########
 
 
 
-light_source{
-	<0.0,10.0,-2.0>
-	color White*1
-	spotlight
-	point_at <0,0,0.5>
-	falloff 180
-	radius 100.5
-	tightness 0.0
-	jitter
-	adaptive 4
-	photons{
-		refraction on
-		reflection on
-	}
-}
+
+
 
 
 #declare beinrotation1 = 5*sin(clock)*2*pi;
@@ -201,13 +208,12 @@ union{
 //object{Wings rotate z*20 scale 0.7 translate Position-<10,0,0>}
 
 	
-box{
-	Position-<8,2.5,1.5>,Position+<8,2.5,1.5>
-	texture{pigment{color White}}	
-}
-	union{
-		//fleck hinte
-		union{
+	box{ // körper
+		Position-<8,2.5,1.5>,Position+<8,2.5,1.5>
+		texture{pigment{color White}}	
+	}
+	union{//flecken
+		union{//fleck hinte
 			box{
 					Position-<-6,0,-1.6>,Position-<-3,1,1.6>
 					texture{pigment{color Black}}
@@ -221,8 +227,7 @@ box{
 					texture{pigment{color Black}}
 				}	
 		}
-		//fleck vorne
-		union{
+		union{//fleck vorne
 			box{
 					Position-<6,-2,-1.6>,Position-<3,-1,1.6>
 					texture{pigment{color Black}}
@@ -234,8 +239,7 @@ box{
 		}
 	}
 	
-	//Euter
-	union{
+	union{//Euter
 		box{	
 			Position-<-7.5,3.5,0.5>,Position-<-3,0,-0.5>
 			texture{pigment{color Pink}}
@@ -253,129 +257,132 @@ box{
 			texture{pigment{color White}}
 		}
 	}
-
-//bein vorne links
-box{Position-<7,2.5,1.5>,Position-<6,9.5,0.5>
-	texture{pigment{color White}}
 	
-	translate (Position-<7,2.5,-1.5>)*-1
-	translate <-0.5,0,0>
-	rotate <0,0,beinrotation2>	
-	translate <0.5,0,0>
-	translate Position-<7,2.5,-1.5>
-		
-}
-//bein vorne rechts
-box{Position-<7,2.5,-1.5>,Position-<6,9.5,-0.5>
-	texture{pigment{color White}}
-	
-	translate (Position-<7,2.5,-1.5>)*-1
-	translate <-0.5,0,0>
-	rotate <0,0,beinrotation1>	
-	translate <0.5,0,0>
-	translate Position-<7,2.5,-1.5>
-	
-}
-//
-//bein hinten links
-box{Position-<-7,2.5,1.5>,Position-<-6,9.5,0.5>
-	texture{pigment{color White}}
-	
-	translate (Position-<-7,2.5,-1.5>)*-1
-	translate <0.5,0,0>
-	rotate <0,0,beinrotation1>	
-	translate <-0.5,0,0>
-	translate Position-<-7,2.5,-1.5>
-
-	
-	
-}
-//bein hinten rechts
-box{Position-<-7,2.5,-1.5>,Position-<-6,9.5,-0.5>
-	texture{pigment{color White}}
-	translate (Position-<-7,2.5,-1.5>)*-1
-	translate <0.5,0,0>
-	rotate <0,0,beinrotation2>	
-	translate <-0.5,0,0>
-	translate Position-<-7,2.5,-1.5>
-}
-//schwanz
-box{Position-<-11,-1.5,-0.5>,Position-<-8,-2.5,0.5>
-	texture{pigment{color White}}
-	
-	
-	//inser pixelate
-	translate (Position-<-8,-2.5,0.5>)*-1
-	//translate <0.5,0,0>
-	rotate <0,0,-45>
-	translate Position-<-8,-2.5,0.5>
-}
-//hals
-box{Position-<+10,0.5,-0.5>,Position-<+8,-2.5,0.5>
+	//bein vorne links
+	box{Position-<7,2.5,1.5>,Position-<6,9.5,0.5>
 		texture{pigment{color White}}
-}
-union{
-//kopf
-	box{Position-<+11,1.5,1.5>,Position-<+10,-3.5,-1.5>
+		
+		translate (Position-<7,2.5,-1.5>)*-1
+		translate <-0.5,0,0>
+		rotate <0,0,beinrotation2>	
+		translate <0.5,0,0>
+		translate Position-<7,2.5,-1.5>
+			
+	}
+	//bein vorne rechts
+	box{Position-<7,2.5,-1.5>,Position-<6,9.5,-0.5>
+		texture{pigment{color White}}
+		
+		translate (Position-<7,2.5,-1.5>)*-1
+		translate <-0.5,0,0>
+		rotate <0,0,beinrotation1>	
+		translate <0.5,0,0>
+		translate Position-<7,2.5,-1.5>
+		
+	}
+	//
+	//bein hinten links
+	box{Position-<-7,2.5,1.5>,Position-<-6,9.5,0.5>
+		texture{pigment{color White}}
+		
+		translate (Position-<-7,2.5,-1.5>)*-1
+		translate <0.5,0,0>
+		rotate <0,0,beinrotation1>	
+		translate <-0.5,0,0>
+		translate Position-<-7,2.5,-1.5>
+	
+		
+		
+	}
+	//bein hinten rechts
+	box{Position-<-7,2.5,-1.5>,Position-<-6,9.5,-0.5>
+		texture{pigment{color White}}
+		translate (Position-<-7,2.5,-1.5>)*-1
+		translate <0.5,0,0>
+		rotate <0,0,beinrotation2>	
+		translate <-0.5,0,0>
+		translate Position-<-7,2.5,-1.5>
+	}
+	//schwanz
+	box{Position-<-11,-1.5,-0.5>,Position-<-8,-2.5,0.5>
+		texture{pigment{color White}}
+		
+		
+		//inser pixelate
+		translate (Position-<-8,-2.5,0.5>)*-1
+		//translate <0.5,0,0>
+		rotate <0,0,-45>
+		translate Position-<-8,-2.5,0.5>
+	}
+	//hals
+	box{Position-<+10,0.5,-0.5>,Position-<+8,-2.5,0.5>
 			texture{pigment{color White}}
 	}
+
+
 	
-	//Zunge JUNGE
-	box{Position-<+10.5,2.0,0.5>,Position-<+11.2,1.0,-0.5>
-			texture{pigment{color Black}}
-	}
-	
-	//Auge
-	box{Position-<+11.0,-2.5,1.5>,Position-<+11.1,-2.0,0.5>
-			texture{pigment{color Black}}
-			no_shadow
-	}
-	box{Position-<+11.0,-2.5,-1.5>,Position-<+11.1,-2.0,-0.5>
-			texture{pigment{color Black}}
-			no_shadow
-	}
-	//geweih
 	union{
-		box{Position-<+11.1,-4.5,-0.5>,Position-<+10.5,-3.25,0.5>
-				texture{pigment{color Black}}
+	//kopf
+		box{Position-<+11,1.5,1.5>,Position-<+10,-3.5,-1.5>
+				texture{pigment{color White}}
 		}
-		//mitte g
-		box{Position-<+11,-4.25,-1.5>,Position-<+10.5,-3.5,-0.5>
-				texture{pigment{color Black}}
-		}
-		box{Position-<+11,-4.1,-2.5>,Position-<+10.5,-3.5,-1.5>
-				texture{pigment{color Black}}
-		}
-		box{Position-<+11,-4.25,-3.5>,Position-<+10.5,-3.25,-2.5>
+		
+		//Zunge JUNGE
+		box{Position-<+10.5,2.0,0.5>,Position-<+11.2,1.0,-0.5>
 				texture{pigment{color Black}}
 		}
 		
-		//mitte g
-		box{Position-<+11,-4.25,1.5>,Position-<+10.5,-3.5,0.5>
+		//Auge
+		box{Position-<+11.0,-2.5,1.5>,Position-<+11.1,-2.0,0.5>
 				texture{pigment{color Black}}
+				no_shadow
 		}
-		box{Position-<+11,-4.1,2.5>,Position-<+10.5,-3.5,1.5>
+		box{Position-<+11.0,-2.5,-1.5>,Position-<+11.1,-2.0,-0.5>
 				texture{pigment{color Black}}
+				no_shadow
 		}
-		box{Position-<+11,-4.25,3.5>,Position-<+10.5,-3.25,2.5>
-				texture{pigment{color Black}}
+		//geweih
+		union{
+			box{Position-<+11.1,-4.5,-0.5>,Position-<+10.5,-3.25,0.5>
+					texture{pigment{color Black}}
+			}
+			//mitte g
+			box{Position-<+11,-4.25,-1.5>,Position-<+10.5,-3.5,-0.5>
+					texture{pigment{color Black}}
+			}
+			box{Position-<+11,-4.1,-2.5>,Position-<+10.5,-3.5,-1.5>
+					texture{pigment{color Black}}
+			}
+			box{Position-<+11,-4.25,-3.5>,Position-<+10.5,-3.25,-2.5>
+					texture{pigment{color Black}}
+			}
+			
+			//mitte g
+			box{Position-<+11,-4.25,1.5>,Position-<+10.5,-3.5,0.5>
+					texture{pigment{color Black}}
+			}
+			box{Position-<+11,-4.1,2.5>,Position-<+10.5,-3.5,1.5>
+					texture{pigment{color Black}}
+			}
+			box{Position-<+11,-4.25,3.5>,Position-<+10.5,-3.25,2.5>
+					texture{pigment{color Black}}
+			}
 		}
-	}
-	
+
 
 
 
 	translate (Position-<+10.5,-2.5,-1.5>)*-1
 	rotate <0,0,40>
 	translate Position-<+10.5,-2.5,-1.5>
-	translate Position+<1,-2,0>
+	translate <1,-2,0>
 	}
 	rotate <0,180,0>
 	scale 0.1
 }
 #end
 
-cow(<clock,0,0>)
+cow(<-clock*1.2,0,0>)
 
 
 
